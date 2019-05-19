@@ -1,1 +1,2 @@
-http\://com.rpc.rpcdemo/beandefinition/registezkdefination.xsd=META-INF/xml/socket-defination.xsd
+http\://com.rpc.rpcdemo/beandefinition/registezk-defination.xsd=com/rpc/rpcdemo/config/registeservice-defination.xsd
+http\://com.rpc.rpcdemo/beandefinition/registeservice-defination.xsd=com/rpc/rpcdemo/config/registezk-defination.xsd

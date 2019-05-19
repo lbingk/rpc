@@ -9,7 +9,6 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class RegisteZKNamespaceHandlerSupport extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        registerBeanDefinitionParser("datasource",
-                new RegisteZKDefinationParser());
+        registerBeanDefinitionParser("zkCustom", new RegisteZKDefinationParser());
     }
 }

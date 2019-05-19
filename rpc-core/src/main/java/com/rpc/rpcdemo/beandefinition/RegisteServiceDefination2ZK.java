@@ -7,12 +7,10 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 @Data
-@Accessors
-public class RegisteServiceImplDefination implements Serializable {
+public class RegisteServiceDefination2ZK implements Serializable {
     private String ip;
     private int port;
     private Class<?> interfaceImplClass;
     private Class<?>[] interfaceClass;
-    private Method[] methods;
 
 }
