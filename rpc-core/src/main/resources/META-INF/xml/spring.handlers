@@ -1,2 +1,0 @@
-http\://com.rpc.rpcdemo/beandefinition/registezkdefination=com.rpc.rpcdemo.handler.namespaceHandler.RegisteZKNamespaceHandlerSupport
-http\://com.rpc.rpcdemo/beandefinition/registeservicedefination=com.rpc.rpcdemo.handler.namespaceHandler.RegisteServiceNamespaceHandlerSupport

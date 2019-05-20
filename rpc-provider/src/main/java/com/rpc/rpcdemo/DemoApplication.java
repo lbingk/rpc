@@ -1,13 +1,19 @@
 package com.rpc.rpcdemo;
 
+import com.rpc.rpcdemo.util.ApplicationContextHolder;
+import com.rpc.rpcdemo.util.RegisteRpcInvokerUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
-@ImportResource(value = {"classpath*:MATA-INF/spring/rpc.xml"})
+
+@ImportResource(locations = {"classpath*:META-INF/spring/rpc.xml"})
 @SpringBootApplication
 public class DemoApplication {
-    public static void main(String[] args) throws Throwable {
-        SpringApplication.run(DemoApplication.class, args);
+    public static void main(String[] args) {
+        ApplicationContext context = SpringApplication.run(DemoApplication.class, args);
+        ApplicationContextHolder.setApplicationContext(context);
+        RegisteRpcInvokerUtils.registeBeanProcess();
     }
 }

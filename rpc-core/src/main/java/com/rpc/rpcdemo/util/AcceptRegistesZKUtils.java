@@ -76,7 +76,7 @@ public class AcceptRegistesZKUtils {
         // 获取注册中心IP与端口
         RegisteZKDefination registeZKDefination = null;
         try {
-            registeZKDefination = SpringUtils.getBean(RegisteZKDefination.class);
+            registeZKDefination = ApplicationContextHolder.getBean(RegisteZKDefination.class);
         } catch (RuntimeException e) {
             throw new RuntimeException("无法找到注册中心信息");
         }

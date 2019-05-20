@@ -8,16 +8,18 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-@Component
-public class SpringUtils implements ApplicationContextAware {
+public class ApplicationContextHolder  {
+
     private static ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        if (null != applicationContext) {
-            applicationContext = ctx;
-        }
+    public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        ApplicationContextHolder.applicationContext = applicationContext;
     }
+
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
 
     public static Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> annotationType) {
         return applicationContext.getBeansWithAnnotation(annotationType);

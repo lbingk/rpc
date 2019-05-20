@@ -20,7 +20,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 
-@Component
 public class RegisteRpcInvokerUtils {
 
     private static boolean registeFlag = !DataConstant.REGISTE_SUCCESS;
@@ -30,7 +29,6 @@ public class RegisteRpcInvokerUtils {
     /*
        提供者注册服务
      */
-    @PostConstruct
     public static void registeBeanProcess() {
         doRegister();
     }
@@ -38,23 +36,22 @@ public class RegisteRpcInvokerUtils {
     // 将RpcInvokerService注解的实现类，表示此类需要远程调用,将此类暴露出到rpc-zk
     private static void doRegister() {
         // 获取提供者的暴露服务的端口
-
         RegisteServiceDefination registeServiceDefination = null;
         try {
-            registeServiceDefination = SpringUtils.getBean(RegisteServiceDefination.class);
+            registeServiceDefination = ApplicationContextHolder.getBean(RegisteServiceDefination.class);
         } catch (RuntimeException e) {
-            throw new RuntimeException("没有配置对应的注册服务，无法找到暴露服务的信息");
+            throw new RuntimeException("无法找到暴露服务的信息");
         }
         // 获取注册中心IP与端口
         RegisteZKDefination registeZKDefination = null;
         try {
-            registeZKDefination = SpringUtils.getBean(RegisteZKDefination.class);
+            registeZKDefination = ApplicationContextHolder.getBean(RegisteZKDefination.class);
         } catch (RuntimeException e) {
             throw new RuntimeException("无法找到注册中心信息");
         }
 
         // 从Spring容器中获取Bean，以保证bean与容器里的bean是一致的
-        Map<String, Object> registeBeanMap = SpringUtils.getBeansWithAnnotation(RpcInvokerService.class);
+        Map<String, Object> registeBeanMap = ApplicationContextHolder.getBeansWithAnnotation(RpcInvokerService.class);
         List<Object> registeBeanInstanceList = Lists.newArrayList();
         for (Map.Entry<String, Object> entry : registeBeanMap.entrySet()) {
             Object value = entry.getValue();
@@ -91,7 +88,7 @@ public class RegisteRpcInvokerUtils {
                 defination.setInterfaceImplClass(bean.getClass());
                 defination.setInterfaceClass(bean.getClass().getInterfaces());
                 // 发送请求
-                logger.info("\n rpc-provider sending the request：[]" + defination);
+                logger.info("\n RPC提供者注册服务信息 : " + defination);
                 outputStream.writeObject(defination.toString().getBytes(DataConstant.UTF8));
                 // 读取 rpc-zk 返回的信息，证明已经注册成功
                 ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
@@ -99,7 +96,7 @@ public class RegisteRpcInvokerUtils {
                 if (result instanceof Throwable) {
                     throw (Throwable) result;
                 }
-                logger.info("\n rpc-provider is registered successfully,and the result：[] " + result);
+                logger.info("\n  ZK返回注册信息 : " + result);
                 socket.shutdownOutput();
                 socket.shutdownInput();
                 // 注意：socket 本身不关闭
@@ -115,14 +112,14 @@ public class RegisteRpcInvokerUtils {
     private static Socket doCreateSocket(RegisteZKDefination registeZKDefination) {
         do {
             try {
-                logger.info("rpc-provicder try to connet the rpc-zk ");
+                logger.info("RPC提供者正在与ZK注册中心建立连接.... ");
                 Socket socket = new Socket(registeZKDefination.getIp(), registeZKDefination.getPort());
                 // 设置超时时间
                 socket.setSoTimeout(registeZKDefination.getTimeout());
                 return socket;
             } catch (IOException e) {
                 registeFlag = !DataConstant.REGISTE_SUCCESS;
-                logger.info("rpc-provicder try to connet the rpc-zk faild");
+                logger.info("RPC提供者正在与ZK注册中心建立连接失败");
             }
         } while (true);
     }
