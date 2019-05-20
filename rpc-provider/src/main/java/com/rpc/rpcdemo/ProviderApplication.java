@@ -10,9 +10,9 @@ import org.springframework.context.annotation.ImportResource;
 
 @ImportResource(locations = {"classpath*:META-INF/spring/rpc.xml"})
 @SpringBootApplication
-public class DemoApplication {
+public class ProviderApplication {
     public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(DemoApplication.class, args);
+        ApplicationContext context = SpringApplication.run(ProviderApplication.class, args);
         ApplicationContextHolder.setApplicationContext(context);
         RegisteRpcInvokerUtils.registeBeanProcess();
     }

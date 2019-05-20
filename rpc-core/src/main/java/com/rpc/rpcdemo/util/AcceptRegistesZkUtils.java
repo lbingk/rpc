@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class AcceptRegistesZKUtils {
+public class AcceptRegistesZkUtils {
     private static final Log logger = LogFactory.getLog(RegisteRpcInvokerUtils.class);
 
     private static RpcZkContext rpcZkContext = RpcZkContext.getInstance();

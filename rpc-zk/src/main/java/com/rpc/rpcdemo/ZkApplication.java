@@ -1,6 +1,6 @@
 package com.rpc.rpcdemo;
 
-import com.rpc.rpcdemo.util.AcceptRegistesZKUtils;
+import com.rpc.rpcdemo.util.AcceptRegistesZkUtils;
 import com.rpc.rpcdemo.util.ApplicationContextHolder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,12 +11,12 @@ import java.io.IOException;
 
 @SpringBootApplication
 @ImportResource(locations = {"classpath*:META-INF/spring/rpc.xml"})
-public class DemoApplication {
+public class ZkApplication {
 
     public static void main(String[] args) throws IOException {
-        ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(ZkApplication.class, args);
         ApplicationContextHolder.setApplicationContext(context);
-        AcceptRegistesZKUtils.acceptRegisteBeanProcess();
+        AcceptRegistesZkUtils.acceptRegisteBeanProcess();
 
     }
 }

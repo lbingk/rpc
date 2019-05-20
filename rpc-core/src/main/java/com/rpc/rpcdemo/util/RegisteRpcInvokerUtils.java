@@ -22,28 +22,29 @@ import java.util.Map;
 
 public class RegisteRpcInvokerUtils {
 
-    private static boolean registeFlag = !DataConstant.REGISTE_SUCCESS;
-
     private static final Log logger = LogFactory.getLog(RegisteRpcInvokerUtils.class);
 
-    /*
-       提供者注册服务
+    private static boolean registeFlag = DataConstant.REGISTE_FAIL;
+    private static RegisteServiceDefination registeServiceDefination = null;
+    private static RegisteZKDefination registeZKDefination = null;
+    private static Socket socket = null;
+
+
+    /**
+     * 提供者注册服务
      */
     public static void registeBeanProcess() {
         doRegister();
     }
 
-    // 将RpcInvokerService注解的实现类，表示此类需要远程调用,将此类暴露出到rpc-zk
     private static void doRegister() {
         // 获取提供者的暴露服务的端口
-        RegisteServiceDefination registeServiceDefination = null;
         try {
             registeServiceDefination = ApplicationContextHolder.getBean(RegisteServiceDefination.class);
         } catch (RuntimeException e) {
             throw new RuntimeException("无法找到暴露服务的信息");
         }
         // 获取注册中心IP与端口
-        RegisteZKDefination registeZKDefination = null;
         try {
             registeZKDefination = ApplicationContextHolder.getBean(RegisteZKDefination.class);
         } catch (RuntimeException e) {
@@ -113,7 +114,7 @@ public class RegisteRpcInvokerUtils {
         do {
             try {
                 logger.info("RPC提供者正在与ZK注册中心建立连接.... ");
-                Socket socket = new Socket(registeZKDefination.getIp(), registeZKDefination.getPort());
+                socket = new Socket(registeZKDefination.getIp(), registeZKDefination.getPort());
                 // 设置超时时间
                 socket.setSoTimeout(registeZKDefination.getTimeout());
                 return socket;
