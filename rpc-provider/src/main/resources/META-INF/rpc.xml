@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rpcRegister="http://com.rpc.rpcdemo/beandefinition/register"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://com.rpc.rpcdemo/beandefinition/register http://com.rpc.rpcdemo/beandefinition/register-defination.xsd">
+
+    <rpcRegister:zkCustom id="zkCustom" ip="127.0.0.1" port="2185" timeout="300"/>
+    <rpcRegister:serviceCustom id="serviceCustom" port="2186" timeout="300"/>
+
+</beans>
