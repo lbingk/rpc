@@ -1,6 +1,5 @@
 package com.rpc.rpcdemo;
 
-import com.rpc.rpcdemo.beandefinition.RpcZkContext;
 import com.rpc.rpcdemo.constant.DataConstant;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,9 +28,12 @@ public class AcceptRegisterServer implements Runnable {
     // 多路复用器
     private Selector selector;
     // 数据缓冲区
-    private ByteBuffer readBuffer = ByteBuffer.allocate(1024);
+    private ByteBuffer readBuffer = ByteBuffer.allocate(10000000);
+    // 连接等待时间
+    private int timeout;
 
-    protected AcceptRegisterServer(int port, LinkedBlockingQueue<StringBuilder> queue) {
+    protected AcceptRegisterServer(int port, int timeout, LinkedBlockingQueue<StringBuilder> queue) {
+        this.timeout = timeout;
         this.linkedBlockingQueue = queue;
         try {
             // 打开多路复用器
@@ -56,7 +58,7 @@ public class AcceptRegisterServer implements Runnable {
         while (true) {
             try {
                 // 多路复用器开始监听
-                this.selector.select();
+                this.selector.select(timeout);
                 // 返回多路复用器已经选择的结果集
                 Set<SelectionKey> selectionKeys = this.selector.selectedKeys();
                 // 遍历结果集
@@ -91,24 +93,23 @@ public class AcceptRegisterServer implements Runnable {
         try {
             // 客户端是否有输入
             int read = channel.read(readBuffer);
-            if (read == -1) {
-                // 证明没有输入,关掉通道
-                channel.close();
-                next.cancel();
-            }
-            // 有输入，则缓冲区复位
-            this.readBuffer.flip();
-            // 根据输入数据的大小来初始化数组的大小
-            byte[] bytes = new byte[this.readBuffer.remaining()];
-            // 将数组写进缓冲区里面
-            ByteBuffer byteBuffer = this.readBuffer.get(bytes);
+            while (read != -1) {
+                // read != -1 证明还没读到流的末端(连接没有关掉)
+                // 有输入，则缓冲区复位
+                this.readBuffer.flip();
+                // 创建sb
+                StringBuilder sb = new StringBuilder();
 
-            CharsetDecoder decoder = charset.newDecoder();
-            CharBuffer charBuffer = decoder.decode(byteBuffer);
-            StringBuilder append = new StringBuilder().append(charBuffer.toString());
-            // 将注册中心收到的消息放到zk的上下文里面
-            logger.info("已经成功接收注册内容：{}" + append);
-            linkedBlockingQueue.put(append);
+                while (this.readBuffer.hasRemaining()) {
+                    sb.append((char) this.readBuffer.get());
+                }
+                readBuffer.clear();
+                // 将注册中心收到的消息放到zk的上下文里面
+                logger.info("已经成功接收注册内容：{}" + sb);
+                linkedBlockingQueue.put(sb);
+                read = channel.read(readBuffer);
+            }
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -121,9 +122,9 @@ public class AcceptRegisterServer implements Runnable {
             // 调用服务器端的accept方法获取客户端的通道
             SocketChannel accept = channel.accept();
             // 设置为非阻塞
-            channel.configureBlocking(false);
-            // 注册
-            channel.register(this.selector, SelectionKey.OP_READ);
+            accept.configureBlocking(false);
+            // 注册,注意是客户通道
+            accept.register(this.selector, SelectionKey.OP_READ);
         } catch (IOException e) {
             e.printStackTrace();
         }

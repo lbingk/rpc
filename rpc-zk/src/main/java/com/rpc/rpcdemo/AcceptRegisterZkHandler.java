@@ -80,7 +80,7 @@ public class AcceptRegisterZkHandler {
             throw new IOException("没有配置注册中心信息");
         }
         // 启动注册中心的接收注册逻辑
-        new Thread(new AcceptRegisterServer(registerZKDefination.getPort(), rpcZkContext.getLinkedBlockingQueue())).start();
+        new Thread(new AcceptRegisterServer(registerZKDefination.getPort(), registerZKDefination.getTimeout(), rpcZkContext.getLinkedBlockingQueue())).start();
         // 启动处理接收注册消息的逻辑
 //        new Thread(new Runnable() {
 //            @Override

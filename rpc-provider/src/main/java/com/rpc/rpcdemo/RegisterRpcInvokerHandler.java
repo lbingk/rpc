@@ -24,21 +24,22 @@ import java.util.Map;
 public class RegisterRpcInvokerHandler {
     // 日志
     private static final Log logger = LogFactory.getLog(RegisterRpcInvokerHandler.class);
-    // 注册状态标志位
-    private static boolean registerFlag = DataConstant.REGISTE_FAIL;
+    // 注册状态标志位（初始化为注册失败，以便启动时开始注册）
+    private static volatile Integer registerFlag = DataConstant.REGISTE_FAIL;
     // xml配置的注册中心的暴露信息
     private static RegisterZKDefination registerZKDefination = null;
     // xml配置的提供者的暴露信息
     private static RegisterServiceDefination registerServiceDefination = null;
     // 获取自定义的容器装载类
     public static ApplicationContextHolder applicationContextHolder = ApplicationContextHolder.getInstance();
+    //
 
 
     public static void register(ApplicationContext ctx) throws UnknownHostException {
         // 装载容器
         applicationContextHolder.setApplicationContext(ctx);
-        // 另起一线程来注册服务，不影响其他逻辑的运行
         doRegisterr();
+        // 另起一线程来注册服务，不影响其他逻辑的运行
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -83,7 +84,7 @@ public class RegisterRpcInvokerHandler {
         // 定义以客户端通道
         SocketChannel socketChannel = null;
         // 定义缓冲区，用来接收客户端的信息
-        ByteBuffer allocate = ByteBuffer.allocate(1024);
+        ByteBuffer allocate = ByteBuffer.allocate(1000000);
         try {
             socketChannel = SocketChannel.open();
             // 定义以注册中心的IP以及端口号
@@ -93,13 +94,15 @@ public class RegisterRpcInvokerHandler {
                 logger.info("正在获取注册中心的连接信息....");
             }
             socketChannel.connect(inetSocketAddress);
-//            socketChannel.wait(registerServiceDefination.getTimeout());
             // 死循环
             while (true) {
                 if (socketChannel.isConnected() && registerFlag == DataConstant.REGISTE_SUCCESS) {
-                    // 已经注册成功并且没有连接正常的情况下
+                    // 在判定已经通道依然存在以及注册成功的情况下，证明不需要重新注册
                     continue;
                 }
+                // 需要重新注册
+                registerFlag = DataConstant.REGISTE_ING;
+
                 // 循环获取暴露的服务信息
                 for (Object serviceIml : registerServiceImplList) {
                     RegisterServiceImpl registerService = new RegisterServiceImpl();
@@ -117,11 +120,13 @@ public class RegisterRpcInvokerHandler {
                     // 清空
                     allocate.clear();
                 }
-                // 成功发送注册消息
+                // 全部成功发送注册消息
                 registerFlag = DataConstant.REGISTE_SUCCESS;
                 logger.info("注册服务成功");
+                // 全部成功后关掉连接，不需要关闭通道 ！！！！
+                socketChannel.shutdownOutput();
             }
-        } catch (IOException e) {
+        } catch (IOException  e) {
             registerFlag = DataConstant.REGISTE_FAIL;
             logger.info("获取注册中心的连接信息失败，正重新建立连接...");
         }
