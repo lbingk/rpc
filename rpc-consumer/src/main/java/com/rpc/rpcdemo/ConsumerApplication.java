@@ -1,20 +1,18 @@
 package com.rpc.rpcdemo;
 
-import com.rpc.rpcdemo.acceptserver.AcceptHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
-import java.io.IOException;
-
-@SpringBootApplication
 @ImportResource(locations = {"classpath*:META-INF/rpc.xml"})
-public class ZkApplication {
+@SpringBootApplication
+public class ConsumerApplication {
 
-    public static void main(String[] args) throws IOException {
-        ApplicationContext context = SpringApplication.run(ZkApplication.class, args);
-        AcceptHandler.startup(context);
+    public static void main(String[] args) {
 
+        ApplicationContext context = SpringApplication.run(ConsumerApplication.class, args);
+        ConsumerRpcInvokerHandler.subscribe(context);
     }
+
 }

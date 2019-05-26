@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.rpc</groupId>
-	<artifactId>rpc-comsumer</artifactId>
+	<artifactId>rpc-consumer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>rpc-comsumer</name>
@@ -76,6 +76,11 @@
 			<artifactId>reflections</artifactId>
 			<version>0.9.10</version>
 		</dependency>
+        <dependency>
+            <groupId>com.rpc</groupId>
+            <artifactId>rpc-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 
 	<build>

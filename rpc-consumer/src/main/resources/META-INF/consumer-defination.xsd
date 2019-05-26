@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            xmlns="http://com.rpc.rpcdemo/beandefinition/consumer"
+            targetNamespace="http://com.rpc.rpcdemo/beandefinition/consumer"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <xsd:element name="socketCustom">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="zkIp" type="xsd:string" use="required"/>
+                    <xsd:attribute name="zkPort" type="xsd:int" use="required"/>
+                    <xsd:attribute name="zkTimeout" type="xsd:int" use="required"/>
+                    <xsd:attribute name="consumerPort" type="xsd:int" use="required"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="rpcService">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="serviceClassName" type="xsd:string" use="required"/>
+                    <xsd:attribute name="ref" type="xsd:string" use="required"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

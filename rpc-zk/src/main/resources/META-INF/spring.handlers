@@ -1,1 +1,1 @@
-http\://com.rpc.rpcdemo/beandefinition/register=com.rpc.rpcdemo.namespaceHandler.RegisterNamespaceHandlerSupport
+http\://com.rpc.rpcdemo/beandefinition/register=com.rpc.rpcdemo.namespacehandler.RegisterNamespaceHandlerSupport
