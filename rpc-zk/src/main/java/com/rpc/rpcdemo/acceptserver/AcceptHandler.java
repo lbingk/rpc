@@ -11,7 +11,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
-import java.nio.channels.Selector;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,8 +23,6 @@ public class AcceptHandler {
     private static RegisterZKDefination registerZKDefination = null;
     // 获取自定义的容器装载类
     public static ApplicationContextHolder applicationContextHolder = ApplicationContextHolder.getInstance();
-    // 多路复用器
-    public static Selector selector;
 
     // 提供者接收注册服务
     public static void startup(ApplicationContext ctx) throws IOException {
@@ -38,11 +35,9 @@ public class AcceptHandler {
             logger.info("没有配置注册中心信息");
             throw new IOException("没有配置注册中心信息");
         }
-        // 多路复用器
-        selector = Selector.open();
 
-        // 启动注册中心的接收注册逻辑
-        new Thread(new AcceptRegisterServer(selector, registerZKDefination.getPort(), registerZKDefination.getTimeout(), rpcZkContext.getLinkedBlockingQueue())).start();
+        // 启动注册中心的接收注册逻辑，启动处理与消费者的订阅（地址的推送）
+        new Thread(new NIOServer(registerZKDefination.getPort(), registerZKDefination.getTimeout())).start();
 
         // 启动处理接收注册消息的逻辑，可以在此方法上加上持久化文件于磁盘
         new Thread(new Runnable() {
@@ -51,11 +46,6 @@ public class AcceptHandler {
                 getRegisteServiceIntoMap();
             }
         }).start();
-
-        // 启动处理与消费者的订阅（地址的推送）
-        new Thread(new AcceptSubscribeServer(selector, registerZKDefination.getPort(), registerZKDefination.getTimeout())).start();
-
-
     }
 
 
@@ -98,7 +88,8 @@ public class AcceptHandler {
                     registerServiceAddressMap.get(interfaceClassString).add(invokerMachineSocketDefination);
 
                 } else {
-                    registerServiceImplDefinations.add(poll);
+
+                    registeServiceMap.put(interfaceClassString, Lists.newArrayList(poll));
                     registerServiceAddressMap.put(interfaceClassString, Lists.newArrayList(invokerMachineSocketDefination));
                 }
 

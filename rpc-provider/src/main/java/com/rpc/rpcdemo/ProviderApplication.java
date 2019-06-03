@@ -15,6 +15,6 @@ public class ProviderApplication {
     public static void main(String[] args) throws UnknownHostException {
         ApplicationContext context = SpringApplication.run(ProviderApplication.class, args);
         context.getBean(RegisterZKDefination.class);
-        RegisterRpcInvokerHandler.register(context);
+        RegisterRpcInvokerHandler.startup(context);
     }
 }

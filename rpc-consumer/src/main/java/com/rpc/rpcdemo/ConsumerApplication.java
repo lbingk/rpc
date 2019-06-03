@@ -1,5 +1,7 @@
 package com.rpc.rpcdemo;
 
+import com.rpc.rpcdemo.service.RpcDemoEmployeService;
+import com.rpc.rpcdemo.service.RpcDemoUserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -9,10 +11,16 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication
 public class ConsumerApplication {
 
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(ConsumerApplication.class, args);
-        ConsumerRpcInvokerHandler.subscribe(context);
+//        RpcDemoUserService rpcDemoGoodsService = (RpcDemoUserService)context.getBean("rpcDemoGoodsService");
+//        RpcDemoEmployeService rpcDemoEmployeService = (RpcDemoEmployeService)context.getBean("rpcDemoEmployeService");
+//        rpcDemoGoodsService.hello();
+//        rpcDemoEmployeService.hello();
+        System.out.println("xxxoo");
+        System.out.println("xxxoo");
+        System.out.println("xxxoo");
     }
 
 }

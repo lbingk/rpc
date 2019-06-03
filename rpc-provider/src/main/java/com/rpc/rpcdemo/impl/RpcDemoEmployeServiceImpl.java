@@ -8,11 +8,11 @@ import com.rpc.rpcdemo.service.RpcDemoEmployeService;
 public class RpcDemoEmployeServiceImpl implements RpcDemoEmployeService {
     @Override
     public void hello() {
-
+        System.out.println("hello");
     }
 
     @Override
     public void hi() {
-
+        System.out.println("hi");
     }
 }

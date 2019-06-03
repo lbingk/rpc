@@ -1,5 +1,6 @@
-package com.rpc.rpcdemo;
+package com.rpc.rpcdemo.consumerserver;
 
+import com.rpc.rpcdemo.ApplicationContextHolder;
 import com.rpc.rpcdemo.beandefinition.SubscribeZKDefination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,7 +34,7 @@ public class ConsumerRpcInvokerHandler {
             logger.info("没有配置通信信息");
         }
        // 与注册中心建立通信
-
+//       new ConsumerSubscribeServer(subscribeZKDefination);
 
     }
 }

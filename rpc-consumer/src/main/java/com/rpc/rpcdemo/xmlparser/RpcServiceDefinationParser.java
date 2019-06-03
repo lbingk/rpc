@@ -33,13 +33,7 @@ public class RpcServiceDefinationParser implements BeanDefinitionParser {
         beanDefinition.getPropertyValues().add("serviceClassName", element.getAttribute("serviceClassName"));
         beanDefinition.getPropertyValues().add("ref", element.getAttribute("ref"));
         BeanDefinitionRegistry beanDefinitionRegistry = parserContext.getRegistry();
-        //注册bean到BeanDefinitionRegistry中
-        //注意：因为调用的服务service对象存在多个的可能性，所以不能用className 来作为注册名字key,用配置的 ref 来检验唯一性
         beanDefinitionRegistry.registerBeanDefinition(element.getAttribute("ref"), beanDefinition);
-
-        //存入自定义的消费者的上下文
-        RpcServiceDefinationContext.putRef(element.getAttribute("ref"), beanDefinition);
-        RpcServiceDefinationContext.addRef(element.getAttribute("ref"));
 
         return beanDefinition;
     }

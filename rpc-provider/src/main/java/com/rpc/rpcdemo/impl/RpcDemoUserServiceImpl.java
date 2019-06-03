@@ -9,11 +9,11 @@ import com.rpc.rpcdemo.service.RpcDemoUserService;
 public class RpcDemoUserServiceImpl implements RpcDemoUserService {
     @Override
     public void hello() {
-
+        System.out.println("hello");
     }
 
     @Override
     public void hi() {
-
+        System.out.println("hi");
     }
 }

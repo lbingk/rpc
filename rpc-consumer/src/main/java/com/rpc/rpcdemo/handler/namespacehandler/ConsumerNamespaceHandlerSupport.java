@@ -12,9 +12,9 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class ConsumerNamespaceHandlerSupport extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        registerBeanDefinitionParser("rpcService",
-                new RpcServiceDefinationParser(RpcServiceDefination.class));
         registerBeanDefinitionParser("socketCustom",
                 new SubscribeZKDefinationParser(SubscribeZKDefination.class));
+        registerBeanDefinitionParser("rpcService",
+                new RpcServiceDefinationParser(RpcServiceDefination.class));
     }
 }

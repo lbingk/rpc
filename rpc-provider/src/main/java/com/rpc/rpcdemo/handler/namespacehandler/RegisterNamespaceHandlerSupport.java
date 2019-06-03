@@ -12,9 +12,9 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class RegisterNamespaceHandlerSupport extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        registerBeanDefinitionParser("serviceCustom",
-                new RegisterServiceDefinationParser(RegisterServiceDefination.class));
         registerBeanDefinitionParser("zkCustom",
                 new RegisterZKDefinationParser(RegisterZKDefination.class));
+        registerBeanDefinitionParser("serviceCustom",
+                new RegisterServiceDefinationParser(RegisterServiceDefination.class));
     }
 }
