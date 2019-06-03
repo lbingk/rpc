@@ -1,6 +1,7 @@
 package com.rpc.rpcdemo.beandefinition;
 
 import com.google.common.collect.Lists;
+import com.rpc.rpcdemo.support.Proxy;
 import com.rpc.rpcdemo.support.ProxyFactory;
 import com.rpc.rpcdemo.util.SerializeUtil;
 import lombok.Data;
@@ -52,10 +53,6 @@ public class RpcServiceDefination implements ApplicationContextAware, FactoryBea
 
     private static final Log logger = LogFactory.getLog(RpcServiceDefination.class);
 
-    // 代理对象生成类
-    private ProxyFactory proxyFactory;
-
-
     @Override
     public Object getObject() throws Exception {
         // 校验
@@ -67,14 +64,16 @@ public class RpcServiceDefination implements ApplicationContextAware, FactoryBea
         // 向注册中心注册服务，获取对应的服务提供者列表
         subscribe();
         // 生成代理对象
-        createProxy();
-        return proxyFactory;
+        Proxy<?> proxy = createProxy();
+        return proxy;
     }
 
-    private void createProxy() {
+    private Proxy<?> createProxy() {
         // TODO: 先假定获取地址列表的第一个地址参数，此处先省去负载均衡的手写实现
-        proxyFactory = new ProxyFactory(serviceClass, invokerMachineSocketDefinationList.get(0),subscribeZKDefination.getConsumerPort());
+        Proxy<?> proxy = ProxyFactory.createProxy(serviceClass, invokerMachineSocketDefinationList.get(0), subscribeZKDefination.getConsumerPort());
+        return proxy;
     }
+
     private void subscribe() {
         try {
             doSubscribe();
@@ -139,7 +138,7 @@ public class RpcServiceDefination implements ApplicationContextAware, FactoryBea
                         throw new RuntimeException("注册中心没该服务的地址列表");
                     }
 
-                    System.out.println("接收到的注册中心提供的的地址列表信息: "+invokerMachineSocketDefinationList.get(0).toString());
+                    System.out.println("接收到的注册中心提供的的地址列表信息: " + invokerMachineSocketDefinationList.get(0).toString());
                     socketChannel.close();
                     return;
                 } else if (selectionKey.isWritable()) {
@@ -175,6 +174,7 @@ public class RpcServiceDefination implements ApplicationContextAware, FactoryBea
         return null;
     }
 
+    @Override
     public boolean isSingleton() {
         // 默认为单例
         return true;

@@ -14,12 +14,8 @@ public class ConsumerApplication {
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(ConsumerApplication.class, args);
-//        RpcDemoUserService rpcDemoGoodsService = (RpcDemoUserService)context.getBean("rpcDemoGoodsService");
-//        RpcDemoEmployeService rpcDemoEmployeService = (RpcDemoEmployeService)context.getBean("rpcDemoEmployeService");
-//        rpcDemoGoodsService.hello();
-//        rpcDemoEmployeService.hello();
-        System.out.println("xxxoo");
-        System.out.println("xxxoo");
+        RpcDemoEmployeService rpcDemoEmployeService = (RpcDemoEmployeService)context.getBean("rpcDemoEmployeService");
+        rpcDemoEmployeService.hello();
         System.out.println("xxxoo");
     }
 

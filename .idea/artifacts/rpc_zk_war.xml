@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="rpc-zk:war">
+    <output-path>$PROJECT_DIR$/rpc-zk/target</output-path>
+    <root id="archive" name="rpc-zk-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="rpc-zk:war exploded" />
+    </root>
+  </artifact>
+</component>
