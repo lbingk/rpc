@@ -3,6 +3,7 @@ package com.rpc.rpcdemo.support;
 import com.rpc.rpcdemo.beandefinition.InvokerBeanDefinition;
 import com.rpc.rpcdemo.beandefinition.InvokerMachineSocketDefination;
 import com.rpc.rpcdemo.util.SerializeUtil;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 
 // 为消费者生成动态代理的对象
-public class Proxy<T> implements InvocationHandler {
+public class RpcServiceBean<T> implements InvocationHandler {
     // 被代理对象
     private Class<T> clz;
     // 经过一系列的算法计算出的远程服务地址
@@ -37,10 +38,10 @@ public class Proxy<T> implements InvocationHandler {
     private static String ip;
 
 
-    public Proxy(Class<T> serviceClass, InvokerMachineSocketDefination invokerMachineSocketDefination, int consumerPort) {
+    public RpcServiceBean(Class<T> serviceClass, InvokerMachineSocketDefination invokerMachineSocketDefination, int consumerPort) {
         this.clz = serviceClass;
         this.invokerMachineSocketDefination = invokerMachineSocketDefination;
-        SERVER_ADDRESS = new InetSocketAddress(invokerMachineSocketDefination.getIp(), invokerMachineSocketDefination.getPort());
+        SERVER_ADDRESS = new InetSocketAddress(StringUtils.split(invokerMachineSocketDefination.getIp(), "/")[1], invokerMachineSocketDefination.getPort());
         port = consumerPort;
         try {
             ip = InetAddress.getLocalHost().getHostAddress();
@@ -124,7 +125,7 @@ public class Proxy<T> implements InvocationHandler {
                 }
             }
             selectionKeys.clear();
-            return receiveText;
+//            return receiveText;
         }
     }
 }

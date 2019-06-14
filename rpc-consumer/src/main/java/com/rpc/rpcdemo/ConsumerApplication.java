@@ -16,7 +16,12 @@ public class ConsumerApplication {
         ApplicationContext context = SpringApplication.run(ConsumerApplication.class, args);
         RpcDemoEmployeService rpcDemoEmployeService = (RpcDemoEmployeService)context.getBean("rpcDemoEmployeService");
         rpcDemoEmployeService.hello();
-        System.out.println("xxxoo");
+        rpcDemoEmployeService.hello();
+        rpcDemoEmployeService.hello();
+        rpcDemoEmployeService.hello();
+        rpcDemoEmployeService.hello();
+        rpcDemoEmployeService.hello();
+        rpcDemoEmployeService.hello();
     }
 
 }

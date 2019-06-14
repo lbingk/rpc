@@ -153,8 +153,6 @@ public class RegisterRpcInvokerHandler {
                             // 解析收到的消息
                             receiveText = new String(receivebuffer.array(), 0, count);
                             analysisObj = (InvokerBeanDefinition) SerializeUtil.deserializeToObject(receiveText);
-                            // 判断消息来源
-                            // 将注册中心收到的消息放到zk的上下文里面
                             System.out.println("接收到消费者： " + client.getRemoteAddress() + " 的消息: " + analysisObj.toString() + " ......");
 
                             // 存储消息，注册到链表有界队列里面

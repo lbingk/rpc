@@ -1,7 +1,9 @@
 package com.rpc.rpcdemo.service;
 
 
-public interface RpcDemoEmployeService {
+import java.rmi.Remote;
+
+public interface RpcDemoEmployeService extends Remote {
     void hello();
 
     void hi();

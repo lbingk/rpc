@@ -1,7 +1,6 @@
 package com.rpc.rpcdemo.beandefinition;
 
 import com.google.common.collect.Lists;
-import com.rpc.rpcdemo.support.Proxy;
 import com.rpc.rpcdemo.support.ProxyFactory;
 import com.rpc.rpcdemo.util.SerializeUtil;
 import lombok.Data;
@@ -45,9 +44,6 @@ public class RpcServiceDefination implements ApplicationContextAware, FactoryBea
     // 配置的接口Class
     private Class<?> serviceClass;
 
-    // 生成的代理类，注册到容器的消费者代理类
-    private Class<?> proxy;
-
     // 服务注册列表，key为serviceClassName
     List<InvokerMachineSocketDefination> invokerMachineSocketDefinationList = Lists.newArrayList();
 
@@ -64,14 +60,13 @@ public class RpcServiceDefination implements ApplicationContextAware, FactoryBea
         // 向注册中心注册服务，获取对应的服务提供者列表
         subscribe();
         // 生成代理对象
-        Proxy<?> proxy = createProxy();
+        Object proxy = createProxy();
         return proxy;
     }
 
-    private Proxy<?> createProxy() {
+    private Object createProxy() {
         // TODO: 先假定获取地址列表的第一个地址参数，此处先省去负载均衡的手写实现
-        Proxy<?> proxy = ProxyFactory.createProxy(serviceClass, invokerMachineSocketDefinationList.get(0), subscribeZKDefination.getConsumerPort());
-        return proxy;
+        return ProxyFactory.createProxy(serviceClass, invokerMachineSocketDefinationList.get(0), subscribeZKDefination.getConsumerPort());
     }
 
     private void subscribe() {
